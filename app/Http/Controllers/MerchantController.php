@@ -134,4 +134,30 @@ public function invoice($orderId)
 
     return view('merchant.orders.invoice', compact('order'));
 }
+ public function editProfile()
+    {
+        $merchant = Merchant::where('user_id', Auth::id())->firstOrFail();
+
+        return view('merchant.profile.edit', compact('merchant'));
+    }
+
+   public function updateProfile(Request $request)
+{
+    $request->validate([
+        'company_name' => 'required|string|max:255',
+        'address' => 'required|string',
+        'contact' => 'required|string|max:50',
+        'description' => 'nullable|string',
+    ]);
+
+    $merchant = auth()->user()->merchant; // Assuming the merchant is related to the authenticated user
+    $merchant->update([
+        'company_name' => $request->company_name,
+        'address' => $request->address,
+        'contact' => $request->contact,
+        'description' => $request->description,
+    ]);
+
+    return redirect()->route('merchant.profile.edit')->with('success', 'Profil berhasil diperbarui.');
+}
 }

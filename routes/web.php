@@ -1,16 +1,11 @@
 <?php
 
-use App\Http\Controllers\CutomerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MerchantController;
 use App\Http\Controllers\CustomerController;
 
-/*
-|--------------------------------------------------------------------------
-| Auth Routes
-|--------------------------------------------------------------------------
-*/
+
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 
@@ -20,17 +15,12 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
-// /*
-// |--------------------------------------------------------------------------
-// | Merchant Routes
-// |--------------------------------------------------------------------------
-// */
+
 Route::middleware(['auth', 'role:merchant'])->group(function () {
     Route::get('/merchant/dashboard', [MerchantController::class, 'dashboard'])->name('merchant.dashboard');
- Route::get('/profile', [MerchantController::class, 'editProfile'])->name('merchant.profile.edit');
-    Route::put('/profile', [MerchantController::class, 'updateProfile'])->name('merchant.profile.update');
+    Route::get('/merchant/profile/edit', [MerchantController::class, 'editProfile'])->name('merchant.profile.edit');
+    Route::put('/merchant/profile', [MerchantController::class, 'updateProfile'])->name('merchant.profile.update');
 
-//     // Menu CRUD
     Route::get('/merchant/menus', [MerchantController::class,'menus'])->name('merchant.menus');
     Route::get('/merchant/menus/create', [MerchantController::class,'createMenu'])->name('merchant.menus.create');
     Route::post('/merchant/menus', [MerchantController::class,'storeMenu'])->name('merchant.menus.store');
@@ -38,18 +28,12 @@ Route::middleware(['auth', 'role:merchant'])->group(function () {
     Route::put('/merchant/menus/{id}', [MerchantController::class,'updateMenu'])->name('merchant.menus.update');
     Route::delete('/merchant/menus/{id}', [MerchantController::class,'deleteMenu'])->name('merchant.menus.delete');
 
-    // Invoice
-    Route::get('/merchant/invoice/{orderId}', [MerchantController::class,'invoice'])->name('merchant.invoice');
+    Route::get('/merchant/invoice/{orderId}', [MerchantController::class,'invoice'])->name('merchant.orders.invoice');
     Route::get('orders', [MerchantController::class, 'orders'])->name('merchant.orders');
-
+Route::get('/merchant/orders/{order}/invoice', [MerchantController::class, 'invoice'])->name('merchant.orders.invoice');
 });
 
 
-// /*
-// |--------------------------------------------------------------------------
-// | Customer Routes
-// |--------------------------------------------------------------------------
-// */
 Route::middleware(['auth', 'role:customer'])->group(function () {
    Route::get('/dashboard', [CustomerController::class, 'dashboard'])->name('customer.dashboard');
     Route::get('/katering', [CustomerController::class, 'search'])->name('customer.katering');
