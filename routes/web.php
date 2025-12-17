@@ -67,6 +67,6 @@ Route::get('/customer/orders/{order}', [CustomerController::class, 'orderInvoice
 
 Route::get('/customer/order/{merchant}', [CustomerController::class, 'orderForm'])->name('customer.order.form');
 
-Route::post('/customer/order/{merchant}', [CustomerController::class, 'orderSubmit'])->name('customer.order.submit');
 });
+
 
