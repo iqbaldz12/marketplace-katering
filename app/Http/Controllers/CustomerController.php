@@ -11,7 +11,7 @@ class CustomerController extends Controller
 {
     public function dashboard()
     {
-        $customer = auth()->user(); // asumsikan user login sebagai customer
+        $customer = auth()->user(); 
         $orders = Order::where('customer_id', $customer->id)
             ->with('merchant')
             ->latest()
