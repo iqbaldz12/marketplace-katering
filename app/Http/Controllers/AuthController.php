@@ -24,7 +24,6 @@ class AuthController extends Controller
             'password' => 'required|min:6|confirmed',
             'role'     => 'required|in:merchant,customer',
 
-            // optional by role
             'company_name' => 'nullable|string|max:255',
             'address'      => 'required|string',
             'contact'      => 'required|string|max:20',

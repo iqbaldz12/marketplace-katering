@@ -150,7 +150,7 @@ public function invoice($orderId)
         'description' => 'nullable|string',
     ]);
 
-    $merchant = auth()->user()->merchant; // Assuming the merchant is related to the authenticated user
+    $merchant = auth()->user()->merchant;
     $merchant->update([
         'company_name' => $request->company_name,
         'address' => $request->address,
