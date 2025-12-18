@@ -64,7 +64,17 @@ class CustomerController extends Controller
 
         return view('Customer.orders.form', compact('merchant')); // sesuaikan dengan folder orders
     }
+public function orders()
+    {
+        $customer = auth()->user(); // user yang sedang login
 
+        $orders = Order::where('customer_id', $customer->id)
+            ->with(['merchant', 'orderItems.menu'])
+            ->latest()
+            ->get();
+
+        return view('customer.orders.index', compact('orders'));
+    }
     public function orderSubmit(Request $request, $merchantId)
     {
         $merchant = Merchant::findOrFail($merchantId);
@@ -114,13 +124,13 @@ class CustomerController extends Controller
     }
 
 
-    public function invoice($id)
-    {
-        $order = Order::with('merchant', 'items.menu')->findOrFail($id);
+   public function invoice($id)
+{
+    $order = Order::with(['merchant', 'orderItems.menu'])->findOrFail($id);
 
-        if ($order->customer_id !== auth()->id()) {
-            abort(403, 'Unauthorized action.');
-        }
+    if ($order->customer_id !== auth()->id()) {
+        abort(403, 'Unauthorized action.');
+    }
 
         return view('customer.invoice', compact('order'));
     }

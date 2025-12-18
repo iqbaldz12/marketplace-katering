@@ -1,50 +1,38 @@
-@extends('customer.layouts.app')
+@extends('layouts.app')
 
-@section('title', 'Daftar Pesanan')
+@section('title', 'Invoice Pesanan')
 
 @section('content')
-<h2 class="mb-4">Daftar Pesanan</h2>
+<div class="container mt-5">
+    <h2>Invoice Pesanan #{{ $order->id }}</h2>
+    <p>Merchant: {{ $order->merchant->name }}</p>
+    <p>Status: {{ ucfirst($order->status) }}</p>
+    <p>Tanggal Pemesanan: {{ $order->created_at->format('d/m/Y H:i') }}</p>
 
-@if(session('success'))
-    <div class="alert alert-success">{{ session('success') }}</div>
-@endif
-
-@if($orders->count())
-    <table class="table table-bordered table-hover bg-white shadow-sm">
-        <thead class="table-danger">
+    <h4>Daftar Item</h4>
+    <table class="table table-bordered">
+        <thead>
             <tr>
-                <th>No</th>
-                <th>Merchant</th>
-                <th>Total</th>
-                <th>Tanggal Pengiriman</th>
-                <th>Status</th>
-                <th>Aksi</th>
+                <th>Menu</th>
+                <th>Jumlah</th>
+                <th>Harga</th>
+                <th>Subtotal</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($orders as $index => $order)
-                <tr>
-                    <td>{{ $index + 1 }}</td>
-                    <td>{{ $order->merchant->name }}</td>
-                    <td>Rp {{ number_format($order->total, 0, ',', '.') }}</td>
-                    <td>{{ \Carbon\Carbon::parse($order->tanggal_kirim)->format('d M Y') }}</td>
-                    <td>
-                        @if($order->status === 'pending')
-                            <span class="badge bg-warning text-dark">Pending</span>
-                        @elseif($order->status === 'completed')
-                            <span class="badge bg-success">Completed</span>
-                        @elseif($order->status === 'cancelled')
-                            <span class="badge bg-danger">Cancelled</span>
-                        @endif
-                    </td>
-                    <td>
-                        <a href="{{ route('customer.order.invoice', $order->id) }}" class="btn btn-sm btn-primary">Lihat Invoice</a>
-                    </td>
-                </tr>
+            @foreach($order->orderItems as $item)
+            <tr>
+                <td>{{ $item->menu->name }}</td>
+                <td>{{ $item->quantity }}</td>
+                <td>Rp {{ number_format($item->price, 0, ',', '.') }}</td>
+                <td>Rp {{ number_format($item->price * $item->quantity, 0, ',', '.') }}</td>
+            </tr>
             @endforeach
+            <tr>
+                <td colspan="3" class="text-end"><strong>Total</strong></td>
+                <td><strong>Rp {{ number_format($order->total, 0, ',', '.') }}</strong></td>
+            </tr>
         </tbody>
     </table>
-@else
-    <p class="text-muted">Belum ada pesanan.</p>
-@endif
+</div>
 @endsection

@@ -25,7 +25,7 @@
             @foreach($orders as $index => $order)
                 <tr>
                     <td>{{ $index + 1 }}</td>
-                    <td>{{ $order->merchant->name }}</td>
+                    <td>{{ $order->merchant->company_name }}</td>
                     <td>Rp {{ number_format($order->total, 0, ',', '.') }}</td>
                     <td>{{ \Carbon\Carbon::parse($order->tanggal_kirim)->format('d M Y') }}</td>
                     <td>
@@ -38,7 +38,7 @@
                         @endif
                     </td>
                     <td>
-                        <a href="{{ route('customer.order.invoice', $order->id) }}" class="btn btn-sm btn-primary">Lihat Invoice</a>
+                        <a href="{{ route('customer.orders.invoice', $order->id) }}" class="btn btn-sm btn-primary">Lihat Invoice</a>
                     </td>
                 </tr>
             @endforeach
